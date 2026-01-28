@@ -17,14 +17,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_15.2.app
-
       - name: Show Xcode version
         run: xcodebuild -version
 
       - name: Show available SDKs
         run: xcodebuild -showsdks
+
+      - name: List available simulators
+        run: xcrun simctl list devices available
 
       - name: Install xcpretty
         run: gem install xcpretty
@@ -35,7 +35,7 @@ jobs:
           xcodebuild build \
             -project SAEMusicLyrics.xcodeproj \
             -scheme SAEMusicLyrics \
-            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2' \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
             -configuration Debug \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
@@ -82,15 +82,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_15.2.app
-
       - name: Run Unit Tests
         run: |
           xcodebuild test \
             -project SAEMusicLyrics.xcodeproj \
             -scheme SAEMusicLyrics \
-            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2' \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
             -configuration Debug \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
@@ -106,9 +103,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_15.2.app
 
       - name: Archive for Distribution
         run: |
