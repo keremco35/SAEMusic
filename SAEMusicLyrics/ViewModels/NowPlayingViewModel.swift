@@ -11,7 +11,7 @@ import Combine
 
 /// Main ViewModel coordinating MusicKit and WebView bridge
 @MainActor
-class NowPlayingViewModel: ObservableObject {
+final class NowPlayingViewModel: ObservableObject {
     
     // MARK: - Published Properties
     
@@ -24,8 +24,8 @@ class NowPlayingViewModel: ObservableObject {
     
     // MARK: - Services
     
-    private let musicService: MusicKitService
-    let webViewBridge: WebViewBridge
+    private var musicService: MusicKitService?
+    let webViewBridge = WebViewBridge()
     
     // MARK: - Private Properties
     
@@ -53,26 +53,27 @@ class NowPlayingViewModel: ObservableObject {
     
     // MARK: - Initialization
     
-    init(musicService: MusicKitService = MusicKitService()) {
-        self.musicService = musicService
-        self.webViewBridge = WebViewBridge()
-        
-        setupBindings()
+    init() {
         webViewBridge.delegate = self
     }
     
     // MARK: - Setup
     
-    /// Bind MusicKitService publishers to ViewModel properties
-    private func setupBindings() {
+    /// Setup music service and bindings - call this after initialization
+    private func setupMusicService() {
+        guard musicService == nil else { return }
+        
+        let service = MusicKitService()
+        self.musicService = service
+        
         // Authorization status
-        musicService.$authorizationStatus
+        service.$authorizationStatus
             .map { $0 == .authorized }
             .receive(on: DispatchQueue.main)
             .assign(to: &$isAuthorized)
         
         // Current track
-        musicService.$currentTrack
+        service.$currentTrack
             .receive(on: DispatchQueue.main)
             .sink { [weak self] track in
                 self?.handleTrackChange(track)
@@ -80,7 +81,7 @@ class NowPlayingViewModel: ObservableObject {
             .store(in: &cancellables)
         
         // Playback time - send to WebView
-        musicService.$playbackTime
+        service.$playbackTime
             .receive(on: DispatchQueue.main)
             .sink { [weak self] time in
                 self?.playbackTime = time
@@ -90,7 +91,7 @@ class NowPlayingViewModel: ObservableObject {
             .store(in: &cancellables)
         
         // Playing state
-        musicService.$isPlaying
+        service.$isPlaying
             .receive(on: DispatchQueue.main)
             .assign(to: &$isPlaying)
     }
@@ -99,42 +100,48 @@ class NowPlayingViewModel: ObservableObject {
     
     /// Initialize the view model (call on appear)
     func initialize() async {
+        // Setup music service on first call
+        setupMusicService()
+        
         // Load the lyrics web view
         webViewBridge.loadLyricsBridge()
         
-        // Check or request authorization
-        musicService.checkAuthorization()
+        guard let service = musicService else { return }
         
-        if musicService.authorizationStatus == .notDetermined {
-            await musicService.requestAuthorization()
+        // Check or request authorization
+        service.checkAuthorization()
+        
+        if service.authorizationStatus == .notDetermined {
+            await service.requestAuthorization()
         }
     }
     
     /// Request MusicKit authorization
     func requestAuthorization() async {
-        await musicService.requestAuthorization()
+        setupMusicService()
+        await musicService?.requestAuthorization()
     }
     
     /// Toggle play/pause
     func togglePlayback() async {
-        await musicService.togglePlayback()
+        await musicService?.togglePlayback()
     }
     
     /// Seek to position (0.0 to 1.0)
     func seek(to progress: Double) {
         guard let track = currentTrack else { return }
         let time = progress * track.duration
-        musicService.seek(to: time)
+        musicService?.seek(to: time)
     }
     
     /// Skip to next track
     func skipNext() async {
-        await musicService.skipToNext()
+        await musicService?.skipToNext()
     }
     
     /// Skip to previous track
     func skipPrevious() async {
-        await musicService.skipToPrevious()
+        await musicService?.skipToPrevious()
     }
     
     // MARK: - Private Methods
@@ -170,16 +177,12 @@ class NowPlayingViewModel: ObservableObject {
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)
                 if let image = UIImage(data: data) {
-                    await MainActor.run {
-                        self.artworkImage = image
-                        self.isLoadingArtwork = false
-                    }
-                }
-            } catch {
-                await MainActor.run {
-                    self.artworkImage = nil
+                    self.artworkImage = image
                     self.isLoadingArtwork = false
                 }
+            } catch {
+                self.artworkImage = nil
+                self.isLoadingArtwork = false
             }
         }
     }
@@ -198,11 +201,11 @@ extension NowPlayingViewModel: WebViewBridgeDelegate {
     
     func webViewBridge(_ bridge: WebViewBridge, didRequestSeekTo milliseconds: Double) {
         let seconds = milliseconds / 1000.0
-        musicService.seek(to: seconds)
+        musicService?.seek(to: seconds)
         
         // Resume playback after seeking
         Task {
-            await musicService.play()
+            await musicService?.play()
         }
     }
     
