@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     name: Build iOS App
-    runs-on: macos-14
+    runs-on: macos-latest
     
     steps:
       - name: Checkout repository
@@ -60,7 +60,7 @@ jobs:
 
   lint:
     name: SwiftLint
-    runs-on: macos-14
+    runs-on: macos-latest
     
     steps:
       - name: Checkout repository
@@ -75,7 +75,7 @@ jobs:
 
   test:
     name: Run Tests
-    runs-on: macos-14
+    runs-on: macos-latest
     needs: build
     
     steps:
@@ -99,7 +99,7 @@ jobs:
 
   release:
     name: Create Release Archive
-    runs-on: macos-14
+    runs-on: macos-latest
     needs: [build, test]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
