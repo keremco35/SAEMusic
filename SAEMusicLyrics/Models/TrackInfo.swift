@@ -31,10 +31,14 @@ struct TrackInfo: Identifiable, Equatable {
     
     /// Initialize from MusicPlayer queue entry
     init?(from entry: MusicPlayer.Queue.Entry) {
-        guard case .song(let song) = entry.item else {
+        // Try to extract song from the entry's item
+        switch entry.item {
+        case .song(let song):
+            self.init(from: song)
+        default:
+            // For other types (musicVideo, etc.), try to get basic info
             return nil
         }
-        self.init(from: song)
     }
     
     /// Manual initializer for previews/testing
@@ -54,3 +58,4 @@ struct TrackInfo: Identifiable, Equatable {
         return Int(duration * 1000)
     }
 }
+

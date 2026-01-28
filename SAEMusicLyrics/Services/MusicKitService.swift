@@ -34,10 +34,6 @@ class MusicKitService: ObservableObject {
         setupObservers()
     }
     
-    deinit {
-        stopPlaybackObservation()
-    }
-    
     // MARK: - Authorization
     
     /// Request MusicKit authorization from user
@@ -91,7 +87,7 @@ class MusicKitService: ObservableObject {
         guard displayLink == nil else { return }
         
         displayLink = CADisplayLink(target: self, selector: #selector(updatePlaybackTime))
-        displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: 30, maximum: 60, __preferred: 60)
+        displayLink?.preferredFramesPerSecond = 60
         displayLink?.add(to: .main, forMode: .common)
         
         // Begin generating playback notifications
