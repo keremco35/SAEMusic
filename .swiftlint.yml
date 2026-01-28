@@ -1,0 +1,72 @@
+# SwiftLint Configuration for SAE Music Lyrics
+
+disabled_rules:
+  - trailing_whitespace
+  - line_length
+  - type_body_length
+  - file_length
+  - function_body_length
+
+opt_in_rules:
+  - empty_count
+  - empty_string
+  - closure_spacing
+  - contains_over_filter_count
+  - contains_over_filter_is_empty
+  - contains_over_first_not_nil
+  - contains_over_range_nil_comparison
+  - discouraged_object_literal
+  - empty_collection_literal
+  - first_where
+  - flatmap_over_map_reduce
+  - implicit_return
+  - last_where
+  - legacy_multiple
+  - modifier_order
+  - prefer_self_in_static_references
+  - prefer_self_type_over_type_of_self
+  - redundant_nil_coalescing
+  - redundant_type_annotation
+  - toggle_bool
+  - unneeded_parentheses_in_closure_argument
+
+included:
+  - SAEMusicLyrics
+
+excluded:
+  - Pods
+  - .build
+  - DerivedData
+
+force_cast: warning
+force_try: warning
+force_unwrapping: warning
+
+identifier_name:
+  min_length:
+    warning: 2
+  max_length:
+    warning: 60
+  excluded:
+    - id
+    - to
+    - x
+    - y
+    - i
+    - j
+    - ms
+    - js
+
+type_name:
+  min_length:
+    warning: 3
+  max_length:
+    warning: 50
+
+nesting:
+  type_level:
+    warning: 3
+  function_level:
+    warning: 5
+
+reporter: "xcode"
