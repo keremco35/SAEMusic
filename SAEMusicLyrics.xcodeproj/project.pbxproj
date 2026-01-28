@@ -16,6 +16,17 @@
 		A1000001229E4A6B00000007 /* WebViewBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000007 /* WebViewBridge.swift */; };
 		A1000001229E4A6B00000008 /* TrackInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000008 /* TrackInfo.swift */; };
 		A1000001229E4A6B00000009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000009 /* Assets.xcassets */; };
+		A1000001229E4A6B00000010 /* MusicProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000010 /* MusicProvider.swift */; };
+		A1000001229E4A6B00000011 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000011 /* Track.swift */; };
+		A1000001229E4A6B00000012 /* AppleMusicProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000012 /* AppleMusicProvider.swift */; };
+		A1000001229E4A6B00000013 /* SpotifyConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000013 /* SpotifyConfig.swift */; };
+		A1000001229E4A6B00000014 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000014 /* KeychainHelper.swift */; };
+		A1000001229E4A6B00000015 /* SpotifyAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000015 /* SpotifyAuthManager.swift */; };
+		A1000001229E4A6B00000016 /* SpotifyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000016 /* SpotifyProvider.swift */; };
+		A1000001229E4A6B00000017 /* SourceSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000017 /* SourceSelectorView.swift */; };
+		A1000001229E4A6B00000018 /* SpotifyIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000018 /* SpotifyIndicatorView.swift */; };
+		A1000001229E4A6B00000019 /* LyricsUnavailableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000019 /* LyricsUnavailableView.swift */; };
+		A1000001229E4A6B00000020 /* SpotifyConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E4A6A00000020 /* SpotifyConnectView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +42,17 @@
 		A1000001229E4A6A0000000A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1000001229E4A6A0000000B /* SAEMusicLyrics.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SAEMusicLyrics.entitlements; sourceTree = "<group>"; };
 		A1000001229E4A6A0000000C /* SAEMusicLyrics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SAEMusicLyrics.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1000001229E4A6A00000010 /* MusicProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicProvider.swift; sourceTree = "<group>"; };
+		A1000001229E4A6A00000011 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
+		A1000001229E4A6A00000012 /* AppleMusicProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicProvider.swift; sourceTree = "<group>"; };
+		A1000001229E4A6A00000013 /* SpotifyConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyConfig.swift; sourceTree = "<group>"; };
+		A1000001229E4A6A00000014 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		A1000001229E4A6A00000015 /* SpotifyAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuthManager.swift; sourceTree = "<group>"; };
+		A1000001229E4A6A00000016 /* SpotifyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyProvider.swift; sourceTree = "<group>"; };
+		A1000001229E4A6A00000017 /* SourceSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceSelectorView.swift; sourceTree = "<group>"; };
+		A1000001229E4A6A00000018 /* SpotifyIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyIndicatorView.swift; sourceTree = "<group>"; };
+		A1000001229E4A6A00000019 /* LyricsUnavailableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsUnavailableView.swift; sourceTree = "<group>"; };
+		A1000001229E4A6A00000020 /* SpotifyConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyConnectView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +82,7 @@
 				A1000001229E4A6600000006 /* ViewModels */,
 				A1000001229E4A6600000007 /* Services */,
 				A1000001229E4A6600000008 /* Models */,
+				A1000001229E4A6600000009 /* Protocols */,
 				A1000001229E4A6A00000009 /* Assets.xcassets */,
 				A1000001229E4A6A0000000A /* Info.plist */,
 				A1000001229E4A6A0000000B /* SAEMusicLyrics.entitlements */,
@@ -89,6 +112,10 @@
 				A1000001229E4A6A00000002 /* NowPlayingView.swift */,
 				A1000001229E4A6A00000003 /* LyricsWebView.swift */,
 				A1000001229E4A6A00000004 /* PlaybackControlsView.swift */,
+				A1000001229E4A6A00000017 /* SourceSelectorView.swift */,
+				A1000001229E4A6A00000018 /* SpotifyIndicatorView.swift */,
+				A1000001229E4A6A00000019 /* LyricsUnavailableView.swift */,
+				A1000001229E4A6A00000020 /* SpotifyConnectView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -106,6 +133,8 @@
 			children = (
 				A1000001229E4A6A00000006 /* MusicKitService.swift */,
 				A1000001229E4A6A00000007 /* WebViewBridge.swift */,
+				A1000001229E4A6A00000012 /* AppleMusicProvider.swift */,
+				A100000122SPOTIFY0001 /* Spotify */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -114,8 +143,28 @@
 			isa = PBXGroup;
 			children = (
 				A1000001229E4A6A00000008 /* TrackInfo.swift */,
+				A1000001229E4A6A00000011 /* Track.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		A1000001229E4A6600000009 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				A1000001229E4A6A00000010 /* MusicProvider.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		A100000122SPOTIFY0001 /* Spotify */ = {
+			isa = PBXGroup;
+			children = (
+				A1000001229E4A6A00000013 /* SpotifyConfig.swift */,
+				A1000001229E4A6A00000014 /* KeychainHelper.swift */,
+				A1000001229E4A6A00000015 /* SpotifyAuthManager.swift */,
+				A1000001229E4A6A00000016 /* SpotifyProvider.swift */,
+			);
+			path = Spotify;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -195,6 +244,17 @@
 				A1000001229E4A6B00000006 /* MusicKitService.swift in Sources */,
 				A1000001229E4A6B00000007 /* WebViewBridge.swift in Sources */,
 				A1000001229E4A6B00000008 /* TrackInfo.swift in Sources */,
+				A1000001229E4A6B00000010 /* MusicProvider.swift in Sources */,
+				A1000001229E4A6B00000011 /* Track.swift in Sources */,
+				A1000001229E4A6B00000012 /* AppleMusicProvider.swift in Sources */,
+				A1000001229E4A6B00000013 /* SpotifyConfig.swift in Sources */,
+				A1000001229E4A6B00000014 /* KeychainHelper.swift in Sources */,
+				A1000001229E4A6B00000015 /* SpotifyAuthManager.swift in Sources */,
+				A1000001229E4A6B00000016 /* SpotifyProvider.swift in Sources */,
+				A1000001229E4A6B00000017 /* SourceSelectorView.swift in Sources */,
+				A1000001229E4A6B00000018 /* SpotifyIndicatorView.swift in Sources */,
+				A1000001229E4A6B00000019 /* LyricsUnavailableView.swift in Sources */,
+				A1000001229E4A6B00000020 /* SpotifyConnectView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
