@@ -79,5 +79,24 @@
     <string>UIStatusBarStyleLightContent</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <true/>
+    
+    <!-- Spotify OAuth Callback URL -->
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>com.spotify.sdk.login</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>saemusic-spotify</string>
+            </array>
+        </dict>
+    </array>
+    
+    <!-- Allow launching Spotify app -->
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>spotify</string>
+    </array>
 </dict>
 </plist>

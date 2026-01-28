@@ -1,56 +1,57 @@
 # SAE Music Lyrics
 
-A native iOS app that displays real-time word-synced Apple Music lyrics using the `am-lyrics` web component.
+A native iOS app that displays real-time word-synced Apple Music lyrics with Spotify playback control support.
 
 ## Features
 
-- 🎵 **Now Playing Detection** - Automatically detects currently playing Apple Music track
-- 📝 **Time-Synced Lyrics** - Word-by-word lyrics synchronized at 60fps
+- 🎵 **Multi-Provider Support** - Works with Apple Music and Spotify
+- 📝 **Time-Synced Lyrics** - Word-by-word lyrics synchronized at 60fps (Apple Music)
 - 🎯 **Tap to Seek** - Tap any lyric line to jump to that position
 - 🎨 **Modern UI** - Dark mode with album art blur background
 - ▶️ **Playback Controls** - Play, pause, seek, and skip tracks
+- 🔄 **Source Switcher** - Seamlessly switch between providers
 
 ## Requirements
 
 - iOS 17.0+
 - Xcode 15.0+
 - Apple Developer Program membership
-- Active Apple Music subscription (for full functionality)
-- Physical iOS device (Simulator doesn't support MusicKit playback detection)
+- Physical iOS device (Simulator doesn't support MusicKit/Spotify)
+
+## Supported Providers
+
+| Feature | Apple Music | Spotify |
+|---------|-------------|---------|
+| Time-synced lyrics | ✅ Full support | ❌ Not available |
+| Playback control | ✅ Direct | ✅ Via Web API |
+| Track detection | ✅ 60fps | ✅ 1s polling |
+| Background playback | ✅ Built-in | ✅ Spotify app |
+
+> **Note**: Spotify doesn't provide a public lyrics API, so lyrics are only available for Apple Music tracks.
 
 ## Architecture
 
 ```
-MVVM + Services
+MVVM + Providers
+├── Protocols
+│   └── MusicProvider - Unified playback protocol
 ├── Views (SwiftUI)
 │   ├── NowPlayingView - Main screen layout
-│   ├── LyricsWebView - WKWebView wrapper for am-lyrics
-│   └── PlaybackControlsView - Play/pause, progress, skip
+│   ├── SourceSelectorView - Provider switcher
+│   ├── LyricsWebView - WKWebView for am-lyrics
+│   └── PlaybackControlsView - Controls
 ├── ViewModels
-│   └── NowPlayingViewModel - Coordinates MusicKit + WebView
+│   └── NowPlayingViewModel - Multi-provider coordinator
 ├── Services
-│   ├── MusicKitService - MusicKit authorization, playback, 60fps updates
-│   └── WebViewBridge - JavaScript ↔ Swift communication
+│   ├── AppleMusicProvider - MusicKit integration
+│   ├── Spotify/
+│   │   ├── SpotifyProvider - Spotify Web API
+│   │   ├── SpotifyAuthManager - OAuth 2.0
+│   │   └── KeychainHelper - Secure token storage
+│   └── WebViewBridge - JavaScript bridge
 └── Models
-    └── TrackInfo - Track metadata model
-```
-
-## Data Flow
-
-```
-┌─────────────┐     ┌───────────────────┐     ┌─────────────────┐
-│ Apple Music │────▶│  MusicKitService  │────▶│ NowPlayingVM    │
-│   (iOS)     │     │  (60fps updates)  │     │                 │
-└─────────────┘     └───────────────────┘     └────────┬────────┘
-                                                       │
-                                                       ▼
-┌─────────────┐     ┌───────────────────┐     ┌─────────────────┐
-│ am-lyrics   │◀────│   WebViewBridge   │◀────│ updateCurrentTime│
-│ (Web Comp.) │     │   (Swift <-> JS)  │     │ updateTrackInfo │
-└──────┬──────┘     └───────────────────┘     └─────────────────┘
-       │                     ▲
-       │ line-click          │ seek request
-       └─────────────────────┘
+    ├── Track - Provider-agnostic track model
+    └── TrackInfo - Legacy (Apple Music)
 ```
 
 ## Installation
@@ -61,63 +62,65 @@ MVVM + Services
    cd SAEMusicLyrics
    ```
 
-2. **Open in Xcode**
+2. **Configure Spotify (Optional)**
+   - Create app at [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+   - Add redirect URI: `saemusic-spotify://callback`
+   - Update `SpotifyConfig.swift` with your Client ID
+
+3. **Open in Xcode**
    ```bash
    open SAEMusicLyrics.xcodeproj
    ```
 
-3. **Configure Signing**
-   - Select the project in Navigator
+4. **Configure Signing**
+   - Select project in Navigator
    - Go to Signing & Capabilities
    - Select your Development Team
-   - Add MusicKit capability if not present
+   - Add MusicKit capability
 
-4. **Build & Run**
+5. **Build & Run**
    - Connect your iPhone/iPad
-   - Select it as the build target
+   - Select it as target
    - Press `Cmd + R`
 
 ## Usage
 
+### Apple Music
 1. Grant Apple Music access when prompted
-2. Open Apple Music and play any song
-3. Return to SAE Music Lyrics
-4. Watch synced lyrics appear and scroll automatically
-5. Tap any lyric line to seek to that position
+2. Play a song in Apple Music
+3. Lyrics appear automatically with word-by-word sync
 
-## How Lyrics Sync Works
-
-1. **Track Detection**: MusicKit observes `MPMusicPlayerControllerNowPlayingItemDidChange` notifications
-2. **Time Updates**: CADisplayLink updates playback time at 60fps
-3. **Web Bridge**: Swift sends `currentTime` (in milliseconds) to JavaScript
-4. **am-lyrics Component**: Web component highlights current word and auto-scrolls
-5. **Seek on Tap**: Line-click events are sent from JS to Swift via `WKScriptMessageHandler`
+### Spotify
+1. Tap Spotify in the source selector
+2. Tap "Connect with Spotify"
+3. Authorize in Spotify app
+4. Control playback from SAE Music Lyrics
 
 ## Key Files
 
 | File | Purpose |
 |------|---------|
-| `MusicKitService.swift` | MusicKit authorization, playback observation, controls |
-| `WebViewBridge.swift` | WKWebView + JavaScript bridge for am-lyrics |
-| `NowPlayingViewModel.swift` | Coordinates services, manages state |
-| `NowPlayingView.swift` | Main UI with album art, lyrics, controls |
-| `LyricsWebView.swift` | UIViewRepresentable wrapper for WKWebView |
+| `MusicProvider.swift` | Unified protocol for music providers |
+| `AppleMusicProvider.swift` | Apple Music implementation |
+| `SpotifyProvider.swift` | Spotify Web API implementation |
+| `SpotifyAuthManager.swift` | OAuth 2.0 authentication |
+| `NowPlayingViewModel.swift` | Multi-provider coordinator |
+| `SourceSelectorView.swift` | Provider switcher UI |
 
-## Lyric Providers
+## Platform Limitations
 
-The app uses the **LyricsPlus (KPoe)** API via the am-lyrics web component:
-- Fetches word-synced lyrics based on song title and artist
-- Falls back to Apple Music endpoint if LyricsPlus is unavailable
-- Supports ISRC codes for precise song matching
+- **Spotify Lyrics**: Spotify does not provide a public synced lyrics API
+- **Audio Streaming**: Spotify audio plays through the Spotify app (per Spotify developer policy)
+- **Simulator**: Neither MusicKit nor Spotify App Remote work in Simulator
 
 ## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
-| "No Track Playing" | Ensure Apple Music is playing, not another app |
-| No lyrics appear | Song may not have synced lyrics available |
-| Authorization denied | Go to Settings > Privacy > Media & Apple Music |
-| Lyrics out of sync | Try pausing and resuming playback |
+| "No Track Playing" | Ensure music is playing in the selected app |
+| No Spotify connection | Check if Spotify app is installed |
+| Token expired | Session refreshes automatically |
+| Lyrics not available | Spotify tracks don't have lyrics; switch to Apple Music |
 
 ## License
 
@@ -125,5 +128,6 @@ MIT License - See LICENSE file for details
 
 ## Credits
 
-- [apple-music-web-components](https://github.com/binimum/apple-music-web-components) - Word-synced lyrics component
+- [apple-music-web-components](https://github.com/binimum/apple-music-web-components) - Word-synced lyrics
 - [LyricsPlus (KPoe)](https://github.com/ibratabian17/YouLyPlus) - Lyrics API provider
+- [Spotify Web API](https://developer.spotify.com/documentation/web-api) - Spotify integration
