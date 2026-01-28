@@ -64,11 +64,11 @@ class SpotifyAuthManager: ObservableObject {
         guard url.scheme == "saemusic-spotify" else { return }
         
         // Extract authorization code from URL
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
-              let code = components.queryItems?.first(where: { $0.name == "code" })?.value else {
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+        guard let code = components?.queryItems?.first(where: { $0.name == "code" })?.value else {
             
             // Check for error
-            if let error = components.queryItems?.first(where: { $0.name == "error" })?.value {
+            if let error = components?.queryItems?.first(where: { $0.name == "error" })?.value {
                 throw SpotifyAuthError.authorizationDenied(error)
             }
             throw SpotifyAuthError.invalidCallback
@@ -188,14 +188,14 @@ class SpotifyAuthManager: ObservableObject {
     
     /// Save tokens to Keychain
     private func saveTokens(_ response: SpotifyTokenResponse) {
-        keychain.save(response.accessToken, forKey: SpotifyConfig.KeychainKeys.accessToken)
+        _ = keychain.save(response.accessToken, forKey: SpotifyConfig.KeychainKeys.accessToken)
         
         if let refreshToken = response.refreshToken {
-            keychain.save(refreshToken, forKey: SpotifyConfig.KeychainKeys.refreshToken)
+            _ = keychain.save(refreshToken, forKey: SpotifyConfig.KeychainKeys.refreshToken)
         }
         
         let expirationDate = Date().addingTimeInterval(TimeInterval(response.expiresIn))
-        keychain.save(date: expirationDate, forKey: SpotifyConfig.KeychainKeys.tokenExpiration)
+        _ = keychain.save(date: expirationDate, forKey: SpotifyConfig.KeychainKeys.tokenExpiration)
     }
 }
 
